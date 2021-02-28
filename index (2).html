@@ -1,0 +1,155 @@
+<html>
+<head>
+<h3>Subtitlewala---- Subtitle Generator Online ----</h3>
+<table>
+<tr style="height:90%">
+<td style="width:50%">
+URL of Video:
+<input type="file" id="files" name="files[]" multiple />
+<script language="javascript">
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+     
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+          document.getElementById("vid").src=e.target.result;
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+
+
+<script language="javascript">
+
+
+function modify()
+{
+	ur=document.getElementById("ur").value;
+	
+	document.getElementById("vid").play();
+}
+
+function curr()
+{
+
+a=document.getElementById("vid").currentTime;
+
+var mins1=00;
+var secs1=00;
+var hrs1=00;
+
+mins1=a/60;
+secs1=a%60;
+hrs1=mins1/60;
+mins1=mins1%60;
+hrs1=parseInt(hrs1);
+mins1=parseInt(mins1);
+secs1=parseInt(secs1);
+//alert(hrs1+":"+mins1+":"+secs1);
+document.getElementById("start").value=hrs1+":"+mins1+":"+secs1;
+document.getElementById("marker").removeEventListener("click", curr);
+document.getElementById("marker").addEventListener("click", curr2);
+
+document.getElementById("marker").value="Stop";
+
+}
+function curr2()
+{
+
+document.getElementById("vid").pause();
+a=document.getElementById("vid").currentTime;
+
+var mins1=00;
+var secs1=00;
+var hrs1=00;
+
+mins1=a/60;
+secs1=a%60;
+hrs1=mins1/60;
+mins1=mins1%60;
+hrs1=parseInt(hrs1);
+mins1=parseInt(mins1);
+secs1=parseInt(secs1);
+//alert(hrs1+":"+mins1+":"+secs1);
+document.getElementById("end").value=hrs1+":"+mins1+":"+secs1;
+
+document.getElementById("marker").removeEventListener("click", curr2);
+document.getElementById("marker").addEventListener("click", curr);
+
+document.getElementById("marker").value="Start";
+
+}
+var i=1;
+function add()
+{
+	document.getElementById("shower").innerHTML=document.getElementById("shower").innerHTML+"--\n"+document.getElementById("start").value+" "+"to"+" "+document.getElementById("end").value+"\n"+document.getElementById("subs").value+"\n-\n";
+
+	i++;
+}
+function op()
+{
+o=1;
+	while(o<i)
+	{
+		document.getElementById("shower").innerHTML=document.getElementById("shower").innerHTML.replace("--\n","\n"+o+"\n");
+		o++;
+		console.log(o);
+	}
+	document.getElementById("shower").innerHTML=document.getElementById("shower").innerHTML.replace(/-/g,"");
+	document.getElementById("shower").innerHTML=document.getElementById("shower").innerHTML.replace(/to/g,"-->");
+	document.forms[1].submit();
+	
+}
+
+
+</script>
+
+
+
+<br><br>
+<video style="width:50%" controls src="rrs.mp4" autoplay id="vid"></video>
+
+<br><br><br>
+ Mark: <input type="button" id="marker" value="Start"><script>document.getElementById("marker").addEventListener("click", curr);</script>
+ <input type="button" value="Play" onclick='document.getElementById("vid").play();'>
+<br><br><br>
+<input type="text" id="start" placeholder="From">
+ to 
+<input type="text" id="end" placeholder="To">
+<br><hr>
+<br>
+Subtitle Text:
+<form method="get" action="javascript:void(0);">
+<input type="text" id="subs" name="subs" placeholder="Subtitle">
+<input type="submit" value="Add" onclick="add()">
+</form>
+<br>
+
+</td>
+<td>
+<form method="POST" action="create_subs.php">
+File Name:
+<input type="text" name="file_name"><br><br>
+<textarea id="shower" name="shower" cols="60" rows="40">
+</textarea><br>
+<input type="button" value="Submit and Download Subtitle File" onclick='op();'>
+</form>
+</td>
+</tr>
+</table>
+
